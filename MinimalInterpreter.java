@@ -7,12 +7,12 @@ public class MinimalInterpreter {
     private final Scanner scanner = new Scanner(System.in);
 
     public void eval(String code) {
-        String[] lines = code.split(";");
+        String[] lines = code.split("\n");
         for (int i = 0; i < lines.length; i++) {
             String line = lines[i].trim();
             if (line.isEmpty()) continue;
 
-            if (line.startsWith("var") || line.startsWith("let")) {
+            if (line.startsWith("let") || line.startsWith("var")) {
                 handleVariableDeclaration(line);
             } else if (line.startsWith("print")) {
                 handlePrint(line);
@@ -30,14 +30,9 @@ public class MinimalInterpreter {
         boolean isConstant = line.startsWith("let");
         line = line.replaceFirst("var", "").replaceFirst("let", "").trim();
         String[] parts = line.split("=");
-        String varName = parts[0].trim();
 
-        int value;
-        if (parts.length > 1) {
-            value = evaluateExpression(parts[1].trim());
-        } else {
-            value = 0; // Default value if no initialization
-        }
+        String varName = parts[0].trim();
+        int value = parts.length > 1 ? evaluateExpression(parts[1].trim()) : 0;
 
         if (isConstant && variables.containsKey(varName)) {
             throw new IllegalStateException("Cannot reassign constant: " + varName);
@@ -66,10 +61,18 @@ public class MinimalInterpreter {
         int blockStart = index + 1;
         int blockEnd = findMatchingEnd(lines, blockStart);
 
+        // If condition is true, execute the block
         if (conditionResult) {
             eval(extractBlock(lines, blockStart, blockEnd));
+        } else {
+            // Handle else block
+            if (blockEnd + 1 < lines.length && lines[blockEnd + 1].trim().startsWith("else")) {
+                int elseBlockStart = blockEnd + 2;  // Skip "else" line
+                int elseBlockEnd = findMatchingEnd(lines, elseBlockStart);
+                eval(extractBlock(lines, elseBlockStart, elseBlockEnd));
+                blockEnd = elseBlockEnd; // Update block end to after else block
+            }
         }
-
         return blockEnd;
     }
 
@@ -101,12 +104,21 @@ public class MinimalInterpreter {
     private String extractBlock(String[] lines, int start, int end) {
         StringBuilder block = new StringBuilder();
         for (int i = start; i < end; i++) {
-            block.append(lines[i].trim()).append(";");
+            block.append(lines[i].trim()).append("\n");
         }
         return block.toString();
     }
 
     private int evaluateExpression(String expression) {
+        // Evaluate parentheses first
+        while (expression.contains("(")) {
+            int startIdx = expression.lastIndexOf("(");
+            int endIdx = expression.indexOf(")", startIdx);
+            String subExpr = expression.substring(startIdx + 1, endIdx);
+            int subResult = evaluateExpression(subExpr); // Recursively evaluate the sub-expression
+            expression = expression.substring(0, startIdx) + subResult + expression.substring(endIdx + 1);
+        }
+
         String[] tokens = expression.split("\\s+");
         int result = getValue(tokens[0]);
 
@@ -157,19 +169,21 @@ public class MinimalInterpreter {
 
     public static void main(String[] args) {
         MinimalInterpreter interpreter = new MinimalInterpreter();
-        System.out.println("Enter your Swift-like code. Type 'exit' to execute.");
+        System.out.println("Enter your code. Press Enter without typing anything to execute.");
         StringBuilder program = new StringBuilder();
         Scanner inputScanner = new Scanner(System.in);
 
+        // Read multi-line input until an empty line is encountered
         while (true) {
-            System.out.print("> ");
             String line = inputScanner.nextLine().trim();
-            if (line.equalsIgnoreCase("exit")) {
+            if (line.isEmpty()) {
                 break;
             }
-            program.append(line).append(";");
+            program.append(line).append("\n");
         }
 
+        // Execute the code
         interpreter.eval(program.toString());
     }
 }
+
