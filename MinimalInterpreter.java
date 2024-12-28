@@ -182,7 +182,7 @@ public class MinimalInterpreter {
             program.append(line).append("\n");
         }
 
-        // Execute the code
+
         interpreter.eval(program.toString());
     }
 }
