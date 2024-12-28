@@ -15,18 +15,22 @@ public class MinimalInterpreter {
             if (line.startsWith("let") || line.startsWith("var")) {
                 handleVariableDeclaration(line);
             } else if (line.startsWith("print")) {
-                System.out.println(evaluateExpression(getContent(line)));
+                handlePrint(line);
             } else if (line.startsWith("input")) {
-                handleInput(getContent(line));
-            } else if (line.startsWith("if") || line.startsWith("while")) {
-                i = handleConditionalBlock(lines, i, line.startsWith("while"));
+                handleInput(line);
+            } else if (line.startsWith("if")) {
+                i = handleIf(lines, i);
+            } else if (line.startsWith("while")) {
+                i = handleWhile(lines, i);
             }
         }
     }
 
     private void handleVariableDeclaration(String line) {
         boolean isConstant = line.startsWith("let");
-        String[] parts = line.replaceFirst("let|var", "").trim().split("=");
+        line = line.replaceFirst("var", "").replaceFirst("let", "").trim();
+        String[] parts = line.split("=");
+
         String varName = parts[0].trim();
         int value = parts.length > 1 ? evaluateExpression(parts[1].trim()) : 0;
 
@@ -36,52 +40,62 @@ public class MinimalInterpreter {
         variables.put(varName, value);
     }
 
-    private void handleInput(String varName) {
-        System.out.print("Enter value for " + varName + ": ");
-        variables.put(varName, scanner.nextInt());
+    private void handlePrint(String line) {
+        String expression = line.substring(line.indexOf('(') + 1, line.indexOf(')')).trim();
+        int result = evaluateExpression(expression);
+        System.out.println(result);
     }
 
-    // Unified If-Else and While Handling
-    private int handleConditionalBlock(String[] lines, int index, boolean isWhile) {
-        String condition = getContent(lines[index]);
-        int blockStart = index + 1;
-        int blockEnd = findBlockEnd(lines, blockStart);
+    private void handleInput(String line) {
+        String varName = line.substring(line.indexOf('(') + 1, line.indexOf(')')).trim();
+        System.out.print("Enter value for " + varName + ": ");
+        int value = scanner.nextInt();
+        variables.put(varName, value);
+    }
 
-        if (isWhile) {
-            // Recheck condition each time after evaluating the block
-            while (evaluateCondition(condition)) {
-                eval(extractBlock(lines, blockStart, blockEnd));
-                // Re-evaluate the condition after executing the block
-                condition = getContent(lines[index]); // Re-fetch the condition
-            }
-            return blockEnd;
-        }
-
-        // If-Else Handling
+    private int handleIf(String[] lines, int index) {
+        String conditionLine = lines[index].trim();
+        String condition = conditionLine.substring(conditionLine.indexOf('(') + 1, conditionLine.indexOf(')')).trim();
         boolean conditionResult = evaluateCondition(condition);
+
+        int blockStart = index + 1;
+        int blockEnd = findMatchingEnd(lines, blockStart);
+
         if (conditionResult) {
             eval(extractBlock(lines, blockStart, blockEnd));
         } else {
-            // Check for else block
+            // Look ahead to handle the else block
             if (blockEnd + 1 < lines.length && lines[blockEnd + 1].trim().startsWith("else")) {
-                int elseStart = blockEnd + 2;
-                int elseEnd = findBlockEnd(lines, elseStart);
-                eval(extractBlock(lines, elseStart, elseEnd));
-                return elseEnd;
+                int elseBlockStart = blockEnd + 2;
+                int elseBlockEnd = findMatchingEnd(lines, elseBlockStart);
+                eval(extractBlock(lines, elseBlockStart, elseBlockEnd));
+                return elseBlockEnd;
             }
         }
+
         return blockEnd;
     }
 
-    private String getContent(String line) {
-        return line.substring(line.indexOf('(') + 1, line.lastIndexOf(')')).trim();
+    private int handleWhile(String[] lines, int index) {
+        String conditionLine = lines[index].trim();
+        String condition = conditionLine.substring(conditionLine.indexOf('(') + 1, conditionLine.indexOf(')')).trim();
+
+        int blockStart = index + 1;
+        int blockEnd = findMatchingEnd(lines, blockStart);
+
+        while (evaluateCondition(condition)) {
+            eval(extractBlock(lines, blockStart, blockEnd));
+        }
+
+        return blockEnd;
     }
 
-    private int findBlockEnd(String[] lines, int start) {
+    private int findMatchingEnd(String[] lines, int start) {
         int openBraces = 1;
         for (int i = start; i < lines.length; i++) {
-            if (lines[i].contains("{")) openBraces++;
-            if (lines[i].contains("}")) openBraces--;
+            String line = lines[i].trim();
+            if (line.contains("{")) openBraces++;
+            if (line.contains("}")) openBraces--;
             if (openBraces == 0) return i;
         }
         throw new IllegalArgumentException("Unmatched braces in code block.");
@@ -96,28 +110,31 @@ public class MinimalInterpreter {
     }
 
     private int evaluateExpression(String expression) {
+        // Evaluate parentheses first
         while (expression.contains("(")) {
-            int openIdx = expression.lastIndexOf("(");
-            int closeIdx = expression.indexOf(")", openIdx);
-            String subExpr = expression.substring(openIdx + 1, closeIdx);
-            int subResult = evaluateExpression(subExpr);
-            expression = expression.substring(0, openIdx) + subResult + expression.substring(closeIdx + 1);
+            int startIdx = expression.lastIndexOf("(");
+            int endIdx = expression.indexOf(")", startIdx);
+            String subExpr = expression.substring(startIdx + 1, endIdx);
+            int subResult = evaluateExpression(subExpr); // Recursively evaluate the sub-expression
+            expression = expression.substring(0, startIdx) + subResult + expression.substring(endIdx + 1);
         }
 
         String[] tokens = expression.split("\\s+");
         int result = getValue(tokens[0]);
 
         for (int i = 1; i < tokens.length; i += 2) {
+            String operator = tokens[i];
             int operand = getValue(tokens[i + 1]);
-            result = switch (tokens[i]) {
-                case "+" -> result + operand;
-                case "-" -> result - operand;
-                case "*" -> result * operand;
-                case "/" -> result / operand;
-                case "%" -> result % operand;
-                default -> throw new IllegalArgumentException("Unknown operator: " + tokens[i]);
-            };
+
+            switch (operator) {
+                case "+" -> result += operand;
+                case "-" -> result -= operand;
+                case "*" -> result *= operand;
+                case "/" -> result /= operand;
+                case "%" -> result %= operand;
+            }
         }
+
         return result;
     }
 
@@ -125,25 +142,28 @@ public class MinimalInterpreter {
         String[] parts = condition.split("\\s+");
         int left = getValue(parts[0]);
         int right = getValue(parts[2]);
-        return switch (parts[1]) {
+        String operator = parts[1];
+
+        return switch (operator) {
             case "==" -> left == right;
             case "!=" -> left != right;
             case ">" -> left > right;
             case ">=" -> left >= right;
             case "<" -> left < right;
             case "<=" -> left <= right;
-            default -> throw new IllegalArgumentException("Unknown operator: " + parts[1]);
+            default -> throw new IllegalArgumentException("Unknown operator: " + operator);
         };
     }
 
     private int getValue(String token) {
         if (variables.containsKey(token)) {
             return variables.get(token);
-        }
-        try {
-            return Integer.parseInt(token);
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Undefined variable or invalid number: " + token);
+        } else {
+            try {
+                return Integer.parseInt(token);
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("Undefined variable or invalid number: " + token);
+            }
         }
     }
 
@@ -153,11 +173,16 @@ public class MinimalInterpreter {
         StringBuilder program = new StringBuilder();
         Scanner inputScanner = new Scanner(System.in);
 
+        // Read multi-line input until an empty line is encountered
         while (true) {
             String line = inputScanner.nextLine().trim();
-            if (line.isEmpty()) break;
+            if (line.isEmpty()) {
+                break;
+            }
             program.append(line).append("\n");
         }
+
+        // Execute the code
         interpreter.eval(program.toString());
     }
 }
