@@ -1,0 +1,132 @@
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class Factorial {
+
+    private final Map<String, Integer> variables = new HashMap<>();
+
+    public void interpret(String code) {
+        String[] lines = code.split("\n");
+        for (String line : lines) {
+            executeLine(line.trim());
+        }
+    }
+
+    private void executeLine(String line) {
+        if (line.startsWith("let ")) {
+            handleAssignment(line);
+        } else if (line.startsWith("print(")) {
+            handlePrint(line);
+        } else if (line.startsWith("factorial(")) {
+            handleFactorial(line);
+        } else {
+            throw new RuntimeException("Unknown command: " + line);
+        }
+    }
+
+    private void handleAssignment(String line) {
+        String[] parts = line.split("=", 2);
+        if (parts.length != 2 || !parts[0].startsWith("let ")) {
+            throw new RuntimeException("Invalid assignment: " + line);
+        }
+        String variableName = parts[0].replace("let", "").trim();
+        String expression = parts[1].trim();
+        int value = evaluateExpression(expression);
+        variables.put(variableName, value);
+    }
+
+    private void handlePrint(String line) {
+        if (!line.endsWith(")")) {
+            throw new RuntimeException("Malformed print statement: " + line);
+        }
+        String expression = line.substring("print(".length(), line.length() - 1).trim();
+        int value = evaluateExpression(expression);
+        System.out.println(value);
+    }
+
+    private void handleFactorial(String line) {
+        if (!line.endsWith(")")) {
+            throw new RuntimeException("Malformed factorial statement: " + line);
+        }
+        String parameter = line.substring("factorial(".length(), line.length() - 1).trim();
+        int value = evaluateExpression(parameter);
+        int factorialResult = computeFactorial(value);
+        System.out.println(factorialResult);
+    }
+
+    private int evaluateExpression(String expression) {
+        for (Map.Entry<String, Integer> entry : variables.entrySet()) {
+            expression = expression.replace(entry.getKey(), String.valueOf(entry.getValue()));
+        }
+        return evaluateSimpleExpression(expression);
+    }
+
+    private int evaluateSimpleExpression(String expression) {
+        int result = 0;
+        char operator = '+';
+        StringBuilder number = new StringBuilder();
+
+        for (int i = 0; i < expression.length(); i++) {
+            char c = expression.charAt(i);
+
+            if (Character.isDigit(c)) {
+                number.append(c);
+            } else if (c == '+' || c == '-' || c == '*' || c == '/') {
+                result = applyOperator(result, Integer.parseInt(number.toString()), operator);
+                operator = c;
+                number.setLength(0);
+            } else if (!Character.isWhitespace(c)) {
+                throw new RuntimeException("Invalid character in expression: " + c);
+            }
+        }
+
+        if (!number.isEmpty()) {
+            result = applyOperator(result, Integer.parseInt(number.toString()), operator);
+        }
+
+        return result;
+    }
+
+    private int applyOperator(int left, int right, char operator) {
+        return switch (operator) {
+            case '+' -> left + right;
+            case '-' -> left - right;
+            case '*' -> left * right;
+            case '/' -> {
+                if (right == 0) throw new ArithmeticException("Division by zero");
+                yield left / right;
+            }
+            default -> throw new RuntimeException("Unknown operator: " + operator);
+        };
+    }
+
+    private int computeFactorial(int n) {
+        if (n < 0) throw new RuntimeException("Factorial is undefined for negative numbers");
+        int result = 1;
+        for (int i = 1; i <= n; i++) {
+            result *= i;
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        StringBuilder code = new StringBuilder();
+        String line;
+
+        System.out.println("Enter your code. Press Enter on an empty line to execute.");
+        while (true) {
+            line = scanner.nextLine();
+
+            if (line.trim().isEmpty()) {
+                break;
+            }
+
+            code.append(line).append("\n");
+        }
+
+        Factorial interpreter = new Factorial();
+        interpreter.interpret(code.toString());
+    }
+}
