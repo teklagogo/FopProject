@@ -136,3 +136,9 @@ public class MultTable {
         }
     }
 }
+//საცდელი კოდი
+//var a = 5
+//for i in 1 ... 10 {
+//print (a * i)
+//    }
+
