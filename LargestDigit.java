@@ -80,7 +80,7 @@ public class LargestDigit {
 }
 
 // შესაყვანი სტრუქტურა
-//let number = 987654
+//let number = 87654
 //var largestDigit = 0
 //
 //for digit in String(number) {

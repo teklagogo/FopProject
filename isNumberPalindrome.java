@@ -4,32 +4,56 @@ public class isNumberPalindrome {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        // Input: Swift code (as a string)
-        System.out.println("Enter Swift code to check if a number is a palindrome:");
-        String swiftCode = scanner.nextLine();
+        System.out.println("Enter Swift code to check if a number is a palindrome. Press ENTER twice to execute:");
 
-        // Parse and process the Swift code
-        boolean isPalindrome = interpretSwiftCode(swiftCode);
+        // Read multiline Swift code input
+        StringBuilder swiftCode = new StringBuilder();
+        String line;
+        int emptyLineCount = 0;
 
-        // Output the result (true or false)
+        while (true) {
+            line = scanner.nextLine();
+            if (line.trim().isEmpty()) {
+                emptyLineCount++;
+                if (emptyLineCount == 2) {
+                    break; // Stop reading input on two consecutive empty lines
+                }
+            } else {
+                emptyLineCount = 0; // Reset empty line count on non-empty input
+                swiftCode.append(line).append("\n");
+            }
+        }
+
+        // Process the input
+        boolean isPalindrome = interpretSwiftCode(swiftCode.toString());
+
+        // Output the result
         System.out.println(isPalindrome);
     }
 
     public static boolean interpretSwiftCode(String swiftCode) {
         // Parse the Swift code and execute logic
-        // For simplicity, we assume the input Swift code follows a simple structure
-        // Extract number (Assuming 'let number = <number>')
         String[] lines = swiftCode.split("\n");
         long number = 0;
         String numberStr = "";
 
         // Find the line that defines 'let number = <number>'
         for (String line : lines) {
+            line = line.trim();
             if (line.startsWith("let number =")) {
                 numberStr = line.split("=")[1].trim();
-                number = Long.parseLong(numberStr);
+                try {
+                    number = Long.parseLong(numberStr);
+                } catch (NumberFormatException e) {
+                    throw new IllegalArgumentException("Error: Invalid number format in 'let number = <number>'.");
+                }
                 break;
             }
+        }
+
+        // If 'let number' is not found, throw an error
+        if (numberStr.isEmpty()) {
+            throw new IllegalArgumentException("Error: Missing 'let number = <number>' in the Swift code.");
         }
 
         // Convert number to a string and check if it's a palindrome
@@ -40,6 +64,7 @@ public class isNumberPalindrome {
         return originalStr.equals(reversedStr);
     }
 }
+
 
 // შესაყვანი სტრუქტურა
 //let number = 123221
