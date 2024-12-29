@@ -128,7 +128,7 @@ public class MultTable {
             }
         }
 
-        // Eval the program
+        // Evaluate the program
         try {
             interpreter.eval(program.toString());
         } catch (Exception e) {
