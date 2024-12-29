@@ -1,103 +1,54 @@
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 public class Factorial {
-    private final Map<String, Integer> variables = new HashMap<>(); // To store variables
-
-    // Evaluates the Swift-like code
-    public void eval(String code) {
-        String[] lines = code.split("\n"); // Split by newlines to process each line separately
-        for (String line : lines) {
-            line = line.trim(); // Trim the line to remove extra spaces
-            if (line.isEmpty()) continue; // Skip empty lines
-
-            // Handle variable assignment (let num = 6)
-            if (line.contains("=")) {
-                handleAssignment(line);
-            }
-            // Handle factorial calculation (factorial(num))
-            else if (line.startsWith("factorial")) {
-                handleFactorial(line);
-            }
-            // Handle print statements (print(num))
-            else if (line.startsWith("print")) {
-                handlePrint(line);
-            } else {
-                System.err.println("Error: Unknown command - " + line);
-            }
-        }
-    }
-
-    // Handle variable assignment (let num = 6)
-    private void handleAssignment(String line) {
-        String[] parts = line.split("=");
-        String varName = parts[0].trim().replace("let", "").trim(); // Remove "let" and trim spaces
-        int value = Integer.parseInt(parts[1].trim()); // Parse the integer value
-        variables.put(varName, value); // Store the value in the variables map
-    }
-
-    // Handle factorial calculation (factorial(num))
-    private void handleFactorial(String line) {
-        // Extract the variable name inside factorial()
-        String varName = line.substring(line.indexOf('(') + 1, line.indexOf(')')).trim();
-        if (variables.containsKey(varName)) {
-            int value = variables.get(varName); // Get the value of the variable
-            int factorialResult = computeFactorial(value); // Calculate factorial
-            variables.put(varName, factorialResult); // Update the variable with factorial result
-        } else {
-            System.err.println("Error: Variable " + varName + " is not defined.");
-        }
-    }
-
-    // Calculate the factorial of a number
-    private int computeFactorial(int n) {
-        if (n == 0) return 1;
-        int result = 1;
-        for (int i = 1; i <= n; i++) {
-            result *= i; // Multiply each number to get the factorial
-        }
-        return result;
-    }
-
-    // Handle print statements (print(num))
-    private void handlePrint(String line) {
-        // Extract the variable name inside print()
-        String varName = line.substring(line.indexOf('(') + 1, line.indexOf(')')).trim();
-        if (variables.containsKey(varName)) {
-            System.out.println(variables.get(varName)); // Print the value of the variable
-        } else {
-            System.err.println("Error: Variable " + varName + " is not defined.");
-        }
-    }
-
     public static void main(String[] args) {
-        Factorial interpreter = new Factorial();
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Welcome to the Swift-like Interpreter!");
-        System.out.println("Enter your program line by line. Press ENTER on an empty line to execute:");
+        // Read full input (including multiple lines)
+        String line1 = scanner.nextLine();  // "let number = 5"
+        String line2 = scanner.nextLine();  // "var factorial = 1"
+        String line3 = scanner.nextLine();  // "for i in 1..number {"
 
-        // Use StringBuilder to gather all the input lines
-        StringBuilder program = new StringBuilder();
-        String line;
-
-        // Collect lines until the user presses Enter on an empty line
-        while (!(line = scanner.nextLine()).isEmpty()) {
-            program.append(line).append("\n"); // Append each line with a newline
+        // Allow user to input multiple lines until "print(factorial)" is entered
+        String line4 = "";
+        while (scanner.hasNextLine()) {
+            line4 = scanner.nextLine();
+            if (line4.equals("print(factorial)")) {
+                break;  // End when "print(factorial)" is entered
+            }
         }
 
-        // Execute the program
-        interpreter.eval(program.toString());
+        // Parse 'let number = 5' to extract the number
+        int number = Integer.parseInt(line1.split("=")[1].trim());  // Extract number from input
 
-        System.out.println("Program execution finished.");
+        // Initialize factorial variable from "var factorial = 1"
+        int factorial = 1;  // Default value
+
+        // Parse the 'for' loop and handle the 'number' variable correctly
+        String loopRange = line3.split("in")[1].split("\\{")[0].trim();  // Extract the range from "for i in 1..number"
+
+        // Replace "number" with the actual value of number in the range
+        loopRange = loopRange.replace("number", String.valueOf(number));
+
+        // Now parse the range correctly
+        int start = Integer.parseInt(loopRange.split("\\.\\.")[0].trim());  // Extract start of range (1)
+        int end = Integer.parseInt(loopRange.split("\\.\\.")[1].trim());  // Extract end of range (number)
+
+        // Execute the loop from 1 to number
+        for (int i = start; i <= end; i++) {
+            factorial *= i;  // Calculate factorial
+        }
+
+        // Output the result after "print(factorial)" is entered
+        System.out.println(factorial);  // Equivalent to 'print(factorial)'
+
         scanner.close();
     }
 }
-
-
-// შესაყვანი კოდი
-// let num = 5
-//factorial(num)
-//print(num)
-
+// შესაყვანი სტრუქტურა
+//let number = 9
+//var factorial = 1
+//for i in 1..number {
+//    factorial *= i
+//}
+//print(factorial)
