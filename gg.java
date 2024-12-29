@@ -14,7 +14,7 @@ public class SumOfFirstNNumbers {
         // Output the result
         System.out.println("The sum is: " + sum);
     }
-
+// jfdufugfiu
     public static int interpretSwiftCode(String swiftCode) {
         // Parse the Swift code and execute logic
         // For simplicity, we assume the input Swift code follows a simple structure
