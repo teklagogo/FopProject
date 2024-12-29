@@ -25,7 +25,7 @@ public class SumOfFirstNNumbers {
 
         // Find the line that defines 'let N = <number>'
         for (String line : lines) {
-            if (line.startsWith("let")) {
+            if (line.startsWith("let") || line.startsWith("var")) {
                 String numberStr = line.split("=")[1].trim();
                 N = Integer.parseInt(numberStr);
                 break;
