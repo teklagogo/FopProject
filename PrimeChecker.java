@@ -1,7 +1,8 @@
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
-public class primeChecker {
+public class PrimeChecker {
     private final Map<String, Integer> variables = new HashMap<>(); // Variable storage
 
     public void eval(String code) {
@@ -61,7 +62,7 @@ public class primeChecker {
         String varName = line.substring(line.indexOf('(') + 1, line.indexOf(')')).trim();
         if (variables.containsKey(varName)) {
             int value = variables.get(varName);
-            System.out.println(value == 1 ? "Prime" : "Not Prime");
+            System.out.println(value == 1 ? "true" : "false"); // Print true for prime, false for non-prime
         } else {
             System.err.println("Error: Variable " + varName + " is not defined.");
         }
@@ -78,15 +79,26 @@ public class primeChecker {
     }
 
     public static void main(String[] args) {
-        primeChecker interpreter = new primeChecker();
+        PrimeChecker interpreter = new PrimeChecker();
+        Scanner scanner = new Scanner(System.in);
 
-        // Example program: Check if a number is prime and print the result
-        String program = """
-            let num = 11
-            isPrime(num)
-            print(num)
-        """;
+        // Ask user for Swift-like code input
+        System.out.println("Enter your Swift-like code to check if a number is prime (finish with an empty line):");
 
-        interpreter.eval(program);
+        // Use StringBuilder to gather all the input lines
+        StringBuilder code = new StringBuilder();
+        String line;
+
+        // Collect lines until the user presses Enter on an empty line
+        while (!(line = scanner.nextLine()).isEmpty()) {
+            code.append(line).append("\n");
+        }
+
+        // Evaluate the provided code
+        interpreter.eval(code.toString());
     }
 }
+// შესაყვანი სტრუქტურა
+//let num = 28
+//isPrime(num)
+//print(num)
