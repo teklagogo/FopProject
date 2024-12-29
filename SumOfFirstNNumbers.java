@@ -12,7 +12,7 @@ public class SumOfFirstNNumbers {
         int sum = interpretSwiftCode(swiftCode);
 
         // Output the result
-        System.out.println("The sum is: " + sum);//jhgkfig
+        System.out.println("The sum is: " + sum);
     }
     
     public static int interpretSwiftCode(String swiftCode) {
