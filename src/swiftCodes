@@ -1,0 +1,143 @@
+// 1. Sum of First N Numbers
+func sumOfFirstNNumbers(_ n: Int) -> Int {
+    var sum = 0
+    for i in 1...n {
+        sum += i
+    }
+    return sum
+}
+print(sumOfFirstNNumbers(5))
+
+<<works
+
+// 2. Factorial of N
+func factorial(_ n: Int) -> Int {
+    var result = 1
+    for i in 1...n {
+        result *= i
+    }
+    return result
+}
+print(factorial(10))
+
+<<works
+
+// 3. GCD of Two Numbers
+func gcd(_ a: Int, _ b: Int) -> Int {
+    var x = a
+    var y = b
+    while y != 0 {
+        let temp = y
+        y = x % y
+        x = temp
+    }
+    return x
+}
+print(gcd(6,9))
+<< works
+
+// 4. Reverse a Number
+func reverseNumber(_ n: Int) -> Int {
+    var number = n
+    var reversed = 0
+    while number != 0 {
+        reversed = reversed * 10 + number % 10
+        number /= 10
+    }
+    return reversed
+}
+
+print(reverseNumber(155))
+
+<<works
+
+
+// 5. Check if a Number is Prime
+func isPrime(_ n: Int) -> Bool {
+    if n <= 1 { return false }
+    if n == 2 { return true }
+    if n % 2 == 0 { return false }
+    var i = 3
+    while i * i <= n {
+        if n % i == 0 { return false }
+        i += 2
+    }
+    return true
+}
+print(isPrime(13))
+
+<< works
+
+// 6. Check if a Number is Palindrome (Without Helper Function)
+func isPalindrome(_ n: Int) -> Bool {
+    var number = n
+    var reversed = 0
+    var original = n
+
+    while number != 0 {
+        reversed = reversed * 10 + number % 10
+        number /= 10
+    }
+
+    return original == reversed
+}
+print(isPalindrome(121))
+<<works
+
+
+// 7. Find the Largest Digit in a Number (Without max and abs)
+func largestDigit(_ n: Int) -> Int {
+    var number = n
+    if number < 0 { number = -number}
+    var largestDigit = 0
+
+    while number != 0 {
+        let digit = number % 10
+        if digit > largestDigit { largestDigit = digit}
+        number /= 10
+    }
+
+    return largestDigit
+}
+print(largestDigit(3947))
+<<works
+
+// 8. Sum of Digits (Without abs)
+func sumOfDigits(_ n: Int) -> Int {
+    var number = n
+    if number < 0 {number = -number}
+
+    var sum = 0
+    while number != 0 {
+        sum += number % 10
+        number /= 10
+    }
+    return sum
+}
+print(sumOfDigits(1234))
+
+<<works
+
+// 9. Multiplication Table
+func multiplicationTable(_ n: Int) {
+    for i in 1...10 {
+        print(n * i)
+    }
+}
+multiplicationTable(5)
+
+// 10. Nth Fibonacci Number
+func nthFibonacci(_ n: Int) -> Int {
+    if n <= 0 { return 0 }
+    if n == 1 { return 1 }
+    var a = 0
+    var b = 1
+    for i in 2...n {
+        let temp = a + b
+        a = b
+        b = temp
+    }
+    return b
+}
+print(nthFibonacci(10))
+<<works
