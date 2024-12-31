@@ -1,7 +1,7 @@
 package src;
 /**
 
- The SwiftReader class is responsible for reading Swift-like code
+ The SwiftReader class is responsible for reading Swift-like code.
 
  interpreting it, and converting it into Java code using the SwiftInterpreterImpl.
  */
