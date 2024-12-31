@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d555d120-07f1-4dcf-8b59-b6f2acadf70a" name="Changes" comment="sdfhsdf">
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="d555d120-07f1-4dcf-8b59-b6f2acadf70a" name="Changes" comment="SwiftReader">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinalFopProject/SwiftReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/FinalFopProject/SwiftReader.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +21,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="SWAP_SIDES_IN_COMPARE_BRANCHES" value="true" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -83,7 +82,8 @@
       <workItem from="1735230520334" duration="367000" />
       <workItem from="1735230918471" duration="350000" />
       <workItem from="1735628398127" duration="527000" />
-      <workItem from="1735628936620" duration="856000" />
+      <workItem from="1735628936620" duration="2087000" />
+      <workItem from="1735631051014" duration="255000" />
     </task>
     <task id="LOCAL-00001" summary="sjkssss">
       <option name="closed" value="true" />
@@ -109,7 +109,39 @@
       <option name="project" value="LOCAL" />
       <updated>1735231137657</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="SwiftReader">
+      <option name="closed" value="true" />
+      <created>1735629817721</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1735629817721</updated>
+    </task>
+    <task id="LOCAL-00005" summary="SwiftReader">
+      <option name="closed" value="true" />
+      <created>1735629886000</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1735629886000</updated>
+    </task>
+    <task id="LOCAL-00006" summary="SwiftReader">
+      <option name="closed" value="true" />
+      <created>1735630077273</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1735630077273</updated>
+    </task>
+    <task id="LOCAL-00007" summary="SwiftReader">
+      <option name="closed" value="true" />
+      <created>1735630153050</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1735630153050</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -141,6 +173,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="sjkssss" />
     <MESSAGE value="sdfhsdf" />
-    <option name="LAST_COMMIT_MESSAGE" value="sdfhsdf" />
+    <MESSAGE value="SwiftReader" />
+    <option name="LAST_COMMIT_MESSAGE" value="SwiftReader" />
   </component>
 </project>
