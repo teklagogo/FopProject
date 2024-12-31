@@ -3,7 +3,10 @@ package FinalFopProject;
 public class Main {
     public static void main(String[] args) {
         try {
-            // Swift code to be interpreted
+            // To test the project, write a code snippet for a single algorithm from the swiftCodes file.
+            // The snippet should include only the essential elements of the algorithm, 
+            // starting from the func to print statement and ending with the print statements.
+            // Ensure the code is concise and contains no comments or additional unnecessary lines.
             String swiftCode = """
 func gcd(_ a: Int, _ b: Int) -> Int {
     var x = a
