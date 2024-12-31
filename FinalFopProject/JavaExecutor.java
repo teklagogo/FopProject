@@ -10,6 +10,12 @@ import java.net.URLClassLoader;
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * The JavaExecutor class is responsible for executing the translated Java code.
+ * Once the Swift code has been fully interpreted and translated into Java, the SwiftInterpreterImpl
+ * returns the generated Java code back to SwiftReader, which forwards it to the main method.
+ * The JavaExecutor then takes over, generating a GeneratedCode.java file.
+ */
 public class JavaExecutor {
     public void executeJavaCode(String javaCode) throws ExecutionException {
         String currentDir = System.getProperty("user.dir");
