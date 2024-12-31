@@ -38,7 +38,7 @@ public class SwiftReader {
             line = line.trim();
 
             // Start of a function definition
-            if (line.startsWith("func")) {
+            if (line.startsWith("func")) { 
 
                 insideFunction = true;
 
