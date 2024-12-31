@@ -158,3 +158,44 @@ import java.util.Map;
 
 ---
 
+
+## swiftCodes
+
+The swiftCodes file includes multiple algorithm implementations written in Swift. These algorithms are translated into Java as part of the project's automated translation and execution process.
+
+To test the translation and interpretation of these algorithms, use the Main class. In the Main class, you need to write an only one code snippet that tests a single algorithm. This snippet will showcase how the selected algorithm is translated from Swift to Java and how the resulting Java code is executed.
+
+For demonstration purposes, only one algorithm should be included at a time. The code snippet should remain concise, containing just from func to its corresponding print statement for output, without additional comments or extraneous code. This ensures clarity and focuses on testing the translation and execution process effectively.
+
+
+---
+
+## Core Components
+
+### 1. Interfaces
+The project revolves around two interfaces defined in SwiftSubset. These interfaces provide the foundation for interpreting incoming Swift code by outlining the methods required for translation and execution.
+
+### 2. SwiftReader
+The SwiftReader class is responsible for reading the Swift code from the main method. It operates line by line, sending each line to the interpreter for translation. The SwiftReader has an interpreter attribute, which is initialized in the main method. This ensures that the Swift code is read and translated step by step in an organized manner.
+
+### 3. SwiftInterpreterImpl
+The SwiftInterpreterImpl class is the heart of the interpreter. It implements the two interfaces from SwiftSubset and provides all the methods necessary to translate Swift code into Java. This includes handling loops, print statements, variable declarations, and other constructs found in Swift.
+
+### 4. JavaExecutor
+The JavaExecutor class is responsible for executing the translated Java code. Once the Swift code has been fully interpreted and translated into Java, the SwiftInterpreterImpl returns the generated Java code back to SwiftReader, which forwards it to the main method. The JavaExecutor then takes over, generating a GeneratedCode.java file.
+
+---
+
+##  Output
+The GeneratedCode.java file is automatically saved in the out folder within the project directory. This file contains the translated Java code and executes it to produce the desired output. The output is displayed in two forms:
+
+- Printed directly in the terminal.
+- Saved in the GeneratedCode.java file for future reference.
+
+## Workflow
+
+1. The main method initiates the process by passing the Swift code to SwiftReader.
+2. SwiftReader reads the Swift code line by line and directs the interpreter to translate it.
+3. The SwiftInterpreterImpl processes the code and generates Java code.
+4. The generated Java code is passed to JavaExecutor.
+5. JavaExecutor creates the GeneratedCode.java file in the out folder and executes it, displaying the output in the terminal.
