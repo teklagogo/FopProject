@@ -1,4 +1,4 @@
-package src;
+package FinalFopProject;
 
 import javax.tools.*;
 import java.io.BufferedWriter;

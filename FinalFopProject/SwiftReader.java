@@ -1,4 +1,4 @@
-package src;
+package FinalFopProject;
 
 public class SwiftReader {
     private SwiftInterpreterImpl interpreter;
