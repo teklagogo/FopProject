@@ -199,3 +199,27 @@ The GeneratedCode.java file is automatically saved in the out folder within the 
 3. The SwiftInterpreterImpl processes the code and generates Java code.
 4. The generated Java code is passed to JavaExecutor.
 5. JavaExecutor creates the GeneratedCode.java file in the out folder and executes it, displaying the output in the terminal.
+
+   ## Customization
+
+Change colors and sizes with CSS variables:
+
+```css
+:root {
+    --primary-color: #3b82f6;
+    --phone-size: 80px;
+    --screen-bounds: 200px;
+}
+Modify motion sensitivity:
+javascriptconst screenX = euler.yaw * SENSITIVITY_X;
+const screenY = -euler.pitch * SENSITIVITY_Y;
+Common Issues
+
+Cursor stuck: Quaternion values might need normalization
+No 3D effects: Browser may not support CSS 3D transforms
+Debug mode: Use console.log('Q:', mapper.quaternion) to check values
+
+Compatibility
+Runs on Chrome, Firefox, Safari, and Edge. Mobile-friendly responsive design.
+
+Pure HTML/CSS/JavaScript - no frameworks or build tools required.
